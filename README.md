@@ -79,4 +79,4 @@ For the Item Based Recommendation, I have used:
 1. Created Requirements.txt file for all the software requirements
 2. Creat Procfile and deploy in Heroku
 
-**Application URL**:
+**Application URL**: https://prodrecommendationsystem.herokuapp.com/
