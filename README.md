@@ -50,11 +50,16 @@ For instance, if the user previously bought cookware, then the user will be reco
 Based on the above mentioned concepts, i have implemented the Recommendation model for the dataset.
 I have built User based recommendation system using 3 models listed below:
 
+
   >> SVD AutoBuildTestset Model
-      >- SVD algorithm is equivalent to Probabilistic Matrix Factorization. It will Automatically generate the testdata to evaulate the model. No need for test-train split
+
+      >- SVD algorithm is equivalent to Probabilistic Matrix Factorization. 
+      It will Automatically generate the testdata to evaulate the model. No need for test-train split
   >> SVD Train Test Split
+ 
       >- In the SVD model, we will split the same data as Train and Test split and train the model to get the user recommendation.
   >> User rating using pivot table
+
       >- Creating pivot for the user and Items with the ratings as values which helps in finding the recommendation.
 
 Using RMSE value, i have found the best model and built the user recommendation.
@@ -62,14 +67,16 @@ Using RMSE value, i have found the best model and built the user recommendation.
 For the Item Based Recommendation, I have used:
 
   >> KNNWithMeans
+
       >- Creates similarity matrix which provides the nearest neighbours
   >> NearestNeighbors
+ 
       >- Unsupervised model which helps in identifying the clusters of similar products and recommend product
 
 
-Deployment:
+**Deployment**:
 
 1. Created Requirements.txt file for all the software requirements
 2. Creat Procfile and deploy in Heroku
 
-Application URL:
+**Application URL**:
