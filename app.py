@@ -30,7 +30,7 @@ def home():
         data=recommend.findSentiment(user) 
         return render_template("index.html", placeholder_text = data)
     if request.method =='GET':
-        return render_template("index.html", placeholder_text = "Hello fro GET method")
+        return render_template("index.html", placeholder_text = "Hello from GET method")
     return render_template("index.html")
     
 
@@ -38,6 +38,24 @@ def home():
 def userList():
     data=recommend.getUsers()
     return data
+
+@app.route('/ItemRecommendation', methods = ['POST'])
+def ItemRecommendation():
+        sentText = request.args.get("param1")
+        print(sentText)
+        data=recommend.finditemRecommendation(sentText)  
+        print("=====================")
+        print(data) 
+        return data
+
+@app.route('/PurchaseList', methods = ['POST'])
+def purchaseList():
+        sentText = request.args.get("param1")
+        print(sentText)
+        data=recommend.purchaselist(sentText)  
+        print("=====================")
+        print(data) 
+        return data
 
 @app.route('/SentimentAnalysis', methods = ['POST'])
 def SentimentAnalysis():
@@ -59,7 +77,10 @@ def UserRecommendation():
         print(data) 
         return data
     except Error:
+        print("Error")
         abort (500)
+
+
 
 @app.errorhandler(404)
 def page_not_found(error):

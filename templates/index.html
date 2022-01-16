@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+     
+        <title>Sentiment Based Product Recommendation System</title>
+    <style>
+        h1 {text-align: center;}
+        form {text-align: center;}
+        table, th, td {
+            border: 1px solid black;
+            text-align: left;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 10pt;
+            border-collapse: collapse;
+        }
+
+        
+                
+    </style>
+    </head>
+<body>
+    <centre><h1>Sentiment Based Product Recommendation System</h1> </centre>
+    
+</body>
+<form action= "#"" method= 'post'>
+    
+    <form action="/action_page.php">
+    <input type="radio" name="Radio1" id="senti" value="SentimentAnalysis" checked=true onchange="changePlaceholder()"> Sentiment Analysis
+
+    <input type="radio" name="Radio1" id="userRec" value="UserRecommendation" onchange="changePlaceholder()">User Product Recommendation
+
+    <input type="radio"  name="Radio1" id="itemRec" value="ItemRecommendation" onchange="changePlaceholder()"> Item Recommendation
+    <p><b>Enter your data:   </b> <input type= "Input" id ="input_id" name= "input_id" placeholder="ex. 'I am disappointed!!!', 'I am happy with the product'"></input></p>
+        <p><input type = "button" onclick = "myfunction()" value = "Submit">   </p>
+        <p><label id = "sentiment_value"></label></p>
+        <p><label id = "purchase_list"></label></p>
+
+    </form>
+        
+
+    </div>
+</form>
+<br>
+<br>
+<script type = "text/javascript">  
+    document.getElementById("input_id").setAttribute('size', '50');
+    document.getElementById('input_id').style.height="30px";
+
+function changePlaceholder(){
+    document.getElementById("sentiment_value").innerHTML = ""  
+    document.getElementById("purchase_list").innerHTML = ""  
+
+    selectedOption =  $("input:radio[name=Radio1]:checked").val()
+    if(selectedOption == "SentimentAnalysis"){
+            document.getElementById("input_id").setAttribute('placeholder' ,"sample text: 'I am disappointed!!!', 'I am happy with the product'")
+        }
+        if(selectedOption == "UserRecommendation"){
+            document.getElementById("input_id").setAttribute('placeholder' ,"sample users: joshua, reannajanine")
+        }
+        if(selectedOption == "ItemRecommendation"){
+            document.getElementById("input_id").setAttribute('placeholder' ,"sample users: joshua, reannajanine")
+        }
+}
+
+    function myfunction() {   
+        document.getElementById("sentiment_value").innerHTML = ""  
+        document.getElementById("purchase_list").innerHTML = ""  
+
+
+        var selectedOption = $("input:radio[name=Radio1]:checked").val()
+        Inp_Value = document.getElementById("input_id").value;
+        var targeturl = '';
+
+        if(Inp_Value==null | Inp_Value==""){
+            alert("Please enter proper value...")   ;
+            return
+        }
+        if(selectedOption == "SentimentAnalysis"){
+            targeturl = '/SentimentAnalysis?param1='+Inp_Value;
+        }
+        if(selectedOption == "UserRecommendation"){
+
+            targeturl = '/UserRecommendation?param1='+Inp_Value;
+        }
+        if(selectedOption == "ItemRecommendation"){
+            $.ajax({
+                 url: '/PurchaseList?param1='+Inp_Value,
+                 type: 'POST',                 
+                success: function(result) {
+                    if(result == null | result == ""){
+                            alert("User not found.. ");
+                            return
+                        }
+                    json = JSON.parse(result)
+                        resp = "<p style='text-align:left'><b>Purchase List</b></p> <table><thead><tr> <th><b>Id</b></th><th><b>Name</b></th><th><b>Brand</b></th><th><b>Manufacturer</b></th><th><b>Category</b></th></tr></thead>"
+                        for(count = 0; count < json.length; count++) {
+                            resp += "<tr><td align ='left'>"+json[count].id+"</td>"
+                            resp += "<td align ='left' width: 200px;word-wrap: break-word;>"+json[count].name+"</td>"
+                            resp += "<td align ='left'>"+json[count].brand+"</td>"
+                            resp += "<td align ='left'>"+json[count].manufacturer+"</td>"
+                            resp += "<td align ='left'>"+json[count].categories+"</td></tr>"
+                        }
+                        resp += "</table>"
+                        document.getElementById("purchase_list").innerHTML =resp  
+                }
+                 })
+            targeturl = '/ItemRecommendation?param1='+Inp_Value;
+        }
+        $.ajax({
+                 url: targeturl,
+                 type: 'POST',                 
+                 success: function(result) {
+                    document.getElementById("sentiment_value").innerHTML =""    
+                    if(selectedOption == "UserRecommendation" | selectedOption == "ItemRecommendation"){
+                        if(result == ""){
+                            alert("User not found.. ");
+                            return
+                        }
+                        json = JSON.parse(result)
+                        resp = "<p style='text-align:left'><b>Recommendation</b></p><table><thead><tr> <th><b>Id</b></th><th><b>Name</b></th><th><b>Brand</b></th><th><b>Manufacturer</b></th><th><b>Category</b></th></tr></thead>"
+                        for(count = 0; count < json.length; count++) {
+                            resp += "<tr><td align ='left'>"+json[count].id+"</td>"
+                            resp += "<td align ='left' width: 200px;word-wrap: break-word;>"+json[count].name+"</td>"
+                            resp += "<td align ='left'>"+json[count].brand+"</td>"
+                            resp += "<td align ='left'>"+json[count].manufacturer+"</td>"
+                            resp += "<td align ='left'>"+json[count].categories+"</td></tr>"
+                        }
+                        resp += "</table>"
+                        document.getElementById("sentiment_value").innerHTML =resp    
+                    }else {
+                        document.getElementById("sentiment_value").innerHTML =result    
+                    }           
+                 }
+                     
+             });
+    } 
+   
+    
+</script>  
+
+
+</html>
